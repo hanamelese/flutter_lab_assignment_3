@@ -41,31 +41,48 @@ class AlbumListScreen extends StatelessWidget {
 
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16),
-                    title: Text(
-                      album.title,
-                      style: Theme.of(context).textTheme.titleMedium,
+                  elevation: 6,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Album Title:",
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          album.title,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        Divider(),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          trailing: const Icon(Icons.arrow_forward_ios),
+                          onTap: () {
+                            AppRouter.goToAlbumDetails(
+                              context,
+                              album: album,
+                              photos: state.photos
+                                  .where((p) => p.albumId == album.id)
+                                  .map((p) => PhotoModel(
+                                albumId: p.albumId,
+                                id: p.id,
+                                title: p.title,
+                                url: p.url,
+                                thumbnailUrl: p.thumbnailUrl,
+                              ))
+                                  .toList(),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                    onTap: () {
-                      AppRouter.goToAlbumDetails(
-                        context,
-                        album: album,
-                        photos: state.photos
-                            .where((p) => p.albumId == album.id)
-                            .map((p) => PhotoModel(
-                          albumId: p.albumId,
-                          id: p.id,
-                          title: p.title,
-                          url: p.url,
-                          thumbnailUrl: p.thumbnailUrl,
-                        ))
-                            .toList(),
-                      );
-                    },
                   ),
                 );
               },
